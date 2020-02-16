@@ -42,7 +42,7 @@ main() {
         echo "Writing to non-dimm locations can cause damage!"
         sleep 1
      
-        i2cdetect -y ${BUS} ${DIMM}
+        i2cdump -y ${BUS} ${DIMM}
         echo "Preview of target device: is this the one you want?" 
         sleep 1
     

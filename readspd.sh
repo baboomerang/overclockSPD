@@ -61,7 +61,7 @@ fi
 }
 
 readSPD() {
-    i2cdetect -y ${BUS} ${DIMM}
+    i2cdump -y ${BUS} ${DIMM}
     echo "" | tr -d '\n' > dimm${1}.spd 
     for INDEX in {0..255}; 
     do 
