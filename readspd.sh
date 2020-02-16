@@ -61,10 +61,11 @@ fi
 }
 
 readSPD() {
+    i2cdetect -y ${BUS} ${DIMM}
     echo "" | tr -d '\n' > dimm${1}.spd 
-    for DATADDR in {0..255}; 
+    for INDEX in {0..255}; 
     do 
-        HEX=$(i2cget -y ${BUS} ${1} ${DATADDR} | sed -ne 's/^0x\(.*\)/\1/p')
+        HEX=$(i2cget -y ${BUS} ${1} ${INDEX} | sed -ne 's/^0x\(.*\)/\1/p')
         printf "\x${HEX}" >> dimm${1}.spd
         # printf cant be saved to a bash variable, the output must be sent to a file
         # alternatively, echo -e is not posix compliant so printf is the easiest way.
