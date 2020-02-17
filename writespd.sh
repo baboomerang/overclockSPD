@@ -71,9 +71,9 @@ writeSPD() {
     fi
 
     HEX=$(cat $INPUTFILE | xxd -p -c 256 | sed -e 's/../0x& /g' | tr -d '\n')
-    
+    # i2cset only takes singular input values starting with "0x" i.e. 0x9F
     for INDEX in {0..255}; do
-            i2cset -y ${BUS} ${DIMM} ${INDEX} ${INPUTFILE[${INDEX}]}
+            i2cset -y ${BUS} ${DIMM} ${INDEX} ${HEX[${INDEX}]}
     done
 
 }

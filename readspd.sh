@@ -22,54 +22,71 @@ baboomerang (the writer & provider of this software) will not be liable for any 
 you may suffer in connection with using, modifying, or distributing this "readspd" script.
 COMMENT
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit
 fi
 
+usage() {   echo "Usage: $0 [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]" 1>&2; exit 1; }
+
 main() {
-if [[ $# -lt 2 ]] ;
-then
-    echo "Not enough arguments."
-    echo "Use i2cdetect -lt to get bus address & i2cdetect -y [busaddr] for DIMMaddr"
-    echo "Usage: readspd.sh [bus] [dimmaddr]  optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]"
-    exit 1
-
-else
-    BUS=$1
-    DIMM=$2
-    readSPD $DIMM
-
-    if [[ ! $3 -eq 0 ]];
-    then
-        DIMM2=$3
+    while getopts ":b:d:" o; do
+        case "${o}" in
+            b)
+                BUS=$2
+                ;;
+            d)
+                DIMM=$4
+                ;;
+            *)
+                usage
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    
+    if [ -z "${BUS}" ] || [ -z "${DIMM}" ]; then
+        usage
+    else
+        readSPD $DIMM 
+    fi
+    
+    if [[ ! $5 -eq 0 ]]; then
+        DIMM2=$5
         readSPD $DIMM2
     fi
 
-    if [[ ! $4 -eq 0 ]];
-    then 
-        DIMM3=$4
+    if [[ ! $6 -eq 0 ]]; then 
+        DIMM3=$6
         readSPD $DIMM3
     fi
 
-    if [[ ! $5 -eq 0 ]];
-    then
-        DIMM4=$5
+    if [[ ! $7 -eq 0 ]]; then
+        DIMM4=$7
         readSPD $DIMM4
     fi
-fi
+
 }
 
 readSPD() {
-    i2cdump -y ${BUS} ${DIMM}
+    i2cdump ${BUS} ${DIMM}
+
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "Error, make sure i2c_dev and i2c_i801 modules are loaded."
+        echo ""
+        exit 1
+    fi
+
     echo "" | tr -d '\n' > dimm${1}.spd 
-    for INDEX in {0..255}; 
-    do 
+    
+    for INDEX in {0..255}; do 
         HEX=$(i2cget -y ${BUS} ${1} ${INDEX} | sed -ne 's/^0x\(.*\)/\1/p')
         printf "\x${HEX}" >> dimm${1}.spd
-        # printf cant be saved to a bash variable, the output must be sent to a file
-        # alternatively, echo -e is not posix compliant so printf is the easiest way.
     done 
+    # contents of printf cant be saved to a bash variable, C-string ignores nullbytes 
+    # and other special characters. The output must be sent to a file immediately.
+    # Alternatively, echo -e is not posix compliant so printf is the easiest way.     
 }
 
 main "$@"
