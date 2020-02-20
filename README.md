@@ -21,7 +21,7 @@ Author: http://forum.notebookreview.com/members/valuxin.400286/
 Usage: ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]
 
 ```
-Results will be saved in the same WD as input file. Make sure you have write access to it otherwise the scripts will fail.
+Results will be saved in the same WD as input file. Check if there is write access to it otherwise the scripts will fail.
 
 **Example**
 ```
