@@ -60,17 +60,21 @@ main() {
         printf "\x${ARRAYHEX[9]}" >> ${CONVERTEDFILE}     #DIMM VOLTAGE
         printf "\x${ARRAYHEX[10]}" >> ${CONVERTEDFILE}    #tCK minimum
         printf "\x${ARRAYHEX[11]}" >> ${CONVERTEDFILE}    #tAA minimum
-        printf "\x${ARRAYHEX[22]}" >> ${CONVERTEDFILE}    
-        printf "\x${ARRAYHEX[23]}" >> ${CONVERTEDFILE}    
+        printf "\x${ARRAYHEX[22]}" >> ${CONVERTEDFILE}    #
+        printf "\x${ARRAYHEX[23]}" >> ${CONVERTEDFILE}    #
         printf "\x${ARRAYHEX[12]}" >> ${CONVERTEDFILE}    #tcWL minimum
         printf "\x${ARRAYHEX[13]}" >> ${CONVERTEDFILE}    #tRP  minimum
         printf "\x${ARRAYHEX[14]}" >> ${CONVERTEDFILE}    #tRCD minimum
         printf "\x${ARRAYHEX[15]}" >> ${CONVERTEDFILE}    #tWR  minimum
-
-        UPPERtRASNIBBLE=${ARRAYHEX[24]}                   #this is the full byte
+        
+        #in the ddr3 spec, these nibbles should be reversed
+        # ie 25 -> 27
+        # but instead this script will preserve what tb2bin does
+        
+        UPPERtRASNIBBLE=${ARRAYHEX[27]}                   #this is the full byte
         UPPERtRASNIBBLE=${UPPERtRASNIBBLE:1:1}
 
-        UPPERtRCNIBBLE=${ARRAYHEX[26]}                    #this is the full byte
+        UPPERtRCNIBBLE=${ARRAYHEX[25]}                    #this is the full byte
         UPPERtRCNIBBLE=${UPPERtRCNIBBLE:1:1}
 
         printf "\x${UPPERtRASNIBBLE}${UPPERtRCNIBBLE}" >> ${CONVERTEDFILE}
