@@ -3,11 +3,12 @@ A fast and easy way to read and write data to RAM SPD.
 
 
 Shell scripts that provide linux users with tools to easily modify data (timings, voltages, configuration...)
-from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows.
+from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows. 
 
-Features include, reading and writing entire SPD contents in one go, writing and saving multiple xmp profiles.
+Other scripts work but don't save the data in a compatbile (ready to flash) format.
 
-*THAIPHOON BURNER USERS: EMP files can be converted to a normal XMP too!*
+***It can also convert .emp files***(created by Thaiphoon Burner) into .xmp files.
+
 
 This project aims to make the transition from those Windows-based utilities much easier.
 
