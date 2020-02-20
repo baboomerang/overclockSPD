@@ -14,7 +14,7 @@ main() {
         fi
 
         RAWHEX=$(cat ${EMPFILE} | xxd -p -c 256 | tr -d '\n'| sed -e 's/../& /g')
-        #all of the EMPFILE is stored into the first element of the HEX.
+        #all of the EMPFILE is stored into the first element of the RAWHEX array.
 
         ARRAYHEX=($RAWHEX)
         HEXFILELEN=${#ARRAYHEX[@]}
@@ -37,19 +37,22 @@ main() {
         printf "\x0c" >> ${CONVERTEDFILE}           #xmp magic number
         printf "\x4a" >> ${CONVERTEDFILE}           #xmp magic number
         printf "\x05" >> ${CONVERTEDFILE}
-    # 00   |    00                           00          |      0        0
- # reserved | prfl2 dimmsPerchannel    prfl1 dimmsPerchnl |   profile2 profile1
+    #the 3rd bit in every XMP profile depends on the system ram config
+    #you can configure it to your liking with the description of the byte below
+    #                1 byte =  0000 0000  (8 bits)
+    #   00   |    00                           00          |      0        0
+  # reserved | prfl2 dimmsPerchannel    prfl1 dimmsPerchnl |   profile2 profile1
         # result: 0x05 =   0000 0101
-        # profile 1 enabled
-        # 2 dimms per channel
+        # so profile 1 enabled
+        # and 2 dimms per channel
 
         echo "${ARRAYHEX[@]}"
-        XMPMAJORVERSION=${ARRAYHEX[4]}
+        XMPMAJORVERSION=${ARRAYHEX[4]}                    #31 -> 1
         XMPMAJORVERSION=${XMPMAJORVERSION:1:1}
 
-        XMPMINORVERSION=${ARRAYHEX[5]}
+        XMPMINORVERSION=${ARRAYHEX[5]}                    #33 -> 3
         XMPMINORVERSION=${XMPMINORVERSION:1:1}
-
+                                                          #0x13 -> file
         printf "\x${XMPMAJORVERSION}${XMPMINORVERSION}" >> ${CONVERTEDFILE}
 
         printf "\x${ARRAYHEX[7]}" >> ${CONVERTEDFILE}     #xmp profile 1 MTB dividend
@@ -57,29 +60,29 @@ main() {
         printf "\x00" >> ${CONVERTEDFILE}                 #xmp profile 2 MTB dividend
         printf "\x00" >> ${CONVERTEDFILE}                 #xmp profile 2 MTB divisor
         printf "\x${ARRAYHEX[37]}" >> ${CONVERTEDFILE}    #reserved byte
-        printf "\x${ARRAYHEX[9]}" >> ${CONVERTEDFILE}     #DIMM VOLTAGE
+        printf "\x${ARRAYHEX[9]}" >> ${CONVERTEDFILE}     #DIMM VOLTAGE (usually has no effect)
         printf "\x${ARRAYHEX[10]}" >> ${CONVERTEDFILE}    #tCK minimum
         printf "\x${ARRAYHEX[11]}" >> ${CONVERTEDFILE}    #tAA minimum
-        printf "\x${ARRAYHEX[22]}" >> ${CONVERTEDFILE}    #
-        printf "\x${ARRAYHEX[23]}" >> ${CONVERTEDFILE}    #
+        printf "\x${ARRAYHEX[22]}" >> ${CONVERTEDFILE}    #CAS (list of supported latencies)
+        printf "\x${ARRAYHEX[23]}" >> ${CONVERTEDFILE}    #CAS (list of supported latencies)
         printf "\x${ARRAYHEX[12]}" >> ${CONVERTEDFILE}    #tcWL minimum
         printf "\x${ARRAYHEX[13]}" >> ${CONVERTEDFILE}    #tRP  minimum
         printf "\x${ARRAYHEX[14]}" >> ${CONVERTEDFILE}    #tRCD minimum
         printf "\x${ARRAYHEX[15]}" >> ${CONVERTEDFILE}    #tWR  minimum
         
-        #in the ddr3 spec, these nibbles should be reversed
-        # ie 25 -> 27
+        # in the ddr3 spec, these nibbles should be reversed
+        # i.e. it should be 0x01 then 0x02
         # but instead this script will preserve what tb2bin does
         
-        UPPERtRASNIBBLE=${ARRAYHEX[27]}                   #this is the full byte
-        UPPERtRASNIBBLE=${UPPERtRASNIBBLE:1:1}
+        UPPERtRASNIBBLE=${ARRAYHEX[27]}                   # 02 -> 2
+        UPPERtRASNIBBLE=${UPPERtRASNIBBLE:1:1}            
 
-        UPPERtRCNIBBLE=${ARRAYHEX[25]}                    #this is the full byte
+        UPPERtRCNIBBLE=${ARRAYHEX[25]}                    # 01 -> 1
         UPPERtRCNIBBLE=${UPPERtRCNIBBLE:1:1}
-
+                                                          # 0x21 -> file
         printf "\x${UPPERtRASNIBBLE}${UPPERtRCNIBBLE}" >> ${CONVERTEDFILE}
 
-        printf "\x${ARRAYHEX[24]}" >> ${CONVERTEDFILE}    #tRAS minimum
+        printf "\x${ARRAYHEX[24]}" >> ${CONVERTEDFILE}    #tRAS minimum     #byte 195
         printf "\x${ARRAYHEX[26]}" >> ${CONVERTEDFILE}    #tRC  minimum
         printf "\x${ARRAYHEX[28]}" >> ${CONVERTEDFILE}    #tREFI max   lower byte
         printf "\x${ARRAYHEX[29]}" >> ${CONVERTEDFILE}    #tREFI max   upper byte
@@ -92,15 +95,15 @@ main() {
         printf "\x${ARRAYHEX[17]}" >> ${CONVERTEDFILE}    #tFAW min byte
         printf "\x00" >> ${CONVERTEDFILE}                 #31st byte skipped -ZEROED
         printf "\x00" >> ${CONVERTEDFILE}                 #32nd byte skipped -ZEROED
-        printf "\x${ARRAYHEX[21]}" >> ${CONVERTEDFILE}    #tWTR min
+        printf "\x${ARRAYHEX[21]}" >> ${CONVERTEDFILE}    #tWTR min         #byte 205
         printf "\x00" >> ${CONVERTEDFILE}                 #34th byte skipped -ZEROED
-        printf "\x${ARRAYHEX[36]}" >> ${CONVERTEDFILE}
-        printf "\x${ARRAYHEX[38]}" >> ${CONVERTEDFILE}
-        printf "\x${ARRAYHEX[39]}" >> ${CONVERTEDFILE}
-        printf "\x${ARRAYHEX[40]}" >> ${CONVERTEDFILE}
-        printf "\x${ARRAYHEX[41]}" >> ${CONVERTEDFILE}
-        printf "\x${ARRAYHEX[42]}" >> ${CONVERTEDFILE}
-        echo "finished"
+        printf "\x${ARRAYHEX[36]}" >> ${CONVERTEDFILE}    #CMD-turnaround adjustment
+        printf "\x${ARRAYHEX[38]}" >> ${CONVERTEDFILE}    #SYSTEM CMD ratemode byte208
+        printf "\x${ARRAYHEX[39]}" >> ${CONVERTEDFILE}    #SDRAM autoself refresh byte209
+        printf "\x${ARRAYHEX[40]}" >> ${CONVERTEDFILE}    #byte 210 [reserved]
+        printf "\x${ARRAYHEX[41]}" >> ${CONVERTEDFILE}    #byte 211 [reserved] magic#?
+        printf "\x${ARRAYHEX[42]}" >> ${CONVERTEDFILE}    #byte 212 [reserved]
+        echo "Converted file written to ${CONVERTEDFILE}"
     fi
 }
 

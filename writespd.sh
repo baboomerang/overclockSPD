@@ -58,13 +58,14 @@ main() {
         echo "Please have backups incase something goes wrong."
         sleep 1
      
-        i2cdump ${BUS} ${DIMM} b
-        echo "Preview of target device: is this the one you want?" 
+        i2cdump -y ${BUS} ${DIMM} b
+        echo "Preview of target device: is this the device?" 
         sleep 1
     
-        read -p "Knowing these risks, you will write to ${BUS} ${DIMM} Proceed? [yesiwanttoproceedknowingtheserisks/no]: " yn
+        read -p "Knowing these risks, you will write to bus ${BUS} address ${DIMM}. Proceed? [yesiwanttoproceedknowingtheserisks/no]: " yn
         case $yn in
-            yesiwanttoproceedknowingtheserisks ) writeSPD DIMM
+            yes ) writeSPD DIMM;;
+            #            yesiwanttoproceedknowingtheserisks ) writeSPD DIMM;;
             no ) exit 1;;
             * ) echo "Error: response must be exact option, verbatim as given."; exit 1;;
         esac
@@ -78,36 +79,40 @@ writeSPD() {
         exit 1
     fi
 
-    INPUTFILELEN=${#INPUTFILE[@]}
+    #these 3 lines may not be posix compliant
+    RAWHEX=$(cat ${INPUTFILE} | xxd -p -c 256 | tr -d '\n'| sed -e 's/../0x& /g')
+    ARRAYHEX=($RAWHEX)
+    FILELENGTH=${#ARRAYHEX[@]}
 
     if [ -n "${XMP}" ]; then
-        if [ INPUTFILELEN != 44 ]; then
-            echo "XMP file must be exactly 44 bytes"
+        if [ ${FILELENGTH} != 40 ]; then
+            echo "XMP file must be exactly 40 bytes"
             exit 1
         fi
         EXT="xmp"
-        INDEX=176
-        END=219
-        #END=250 #OVERWITES BOTH XMP PROFILES 1 & 2
+        OFFSET=176
+        END=216
+        #END=250 #this may erase profile 2 if you have anything there.
     else
-        if [ ${INPUTFILELEN} != 256 ]; then
+        if [ ${FILELENGTH} != 256 ]; then
             echo "SPD file must be exactly 256 bytes"
             exit 1
         fi    
         EXT="spd"
-        INDEX=0
+        OFFSET=0;
         END=255
     fi
 
-    HEX=$(cat ${INPUTFILE} | xxd -p -c 256 | sed -e 's/../0x& /g' | tr -d '\n')    
-    while [ ${INDEX} -le ${END} ]; do
-     	echo -en "\rWriting to SPD: ${INDEX}/${END} (${HEX[${INDEX}]})"
-        sleep 0.4
-        i2cset -y ${BUS} ${DIMM} ${INDEX} ${HEX[${INDEX}]}
+    INDEX=0
+    while [ $((INDEX+OFFSET)) -le ${END} ]; do
+        echo -en "\rWriting to SPD: $((INDEX+OFFSET))/${END} BYTE:(${ARRAYHEX[${INDEX}]})"
+        sleep 0.1
+        i2cset -y ${BUS} ${DIMM} $((INDEX+OFFSET)) ${ARRAYHEX[${INDEX}]}
         INDEX=$((INDEX+1))
     done
 
     echo ""
+    i2cdump -y $BUS $DIMM b
     echo "${INPUTFILE} written successfully to ${DIMM}"
 }
 
