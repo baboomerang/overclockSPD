@@ -13,6 +13,22 @@ Directly inspired by the man who created the amazing tb2bin tool: [Valuxin](http
 
 [Background Info on RAMOC and TB2BIN](http://forum.notebookreview.com/threads/guide-how-to-overclock-and-change-timings-for-any-ram-on-most-laptops.805589/)  
 
+DISCLAIMER
+------------------------------------------------
+```
+DISCLAIMER: This "readspd" is provided by baboomerang (the writer & provider of this software)\
+"as is" and "with all faults." baboomerang (the writer & provider of this software)\
+makes no representations or warranties of any kind concerning the safety,\
+suitability, lack of viruses, inaccuracies, typographical errors, or other harmful\
+components of this "readspd" script. There are inherent dangers in the use of any software,\
+and you are solely responsible for determining whether this "readspd" script is compatible \
+with your equipment and other software installed on your equipment. You are also solely \
+responsible for the protection of your equipment and backup of your data, and\
+baboomerang (the writer & provider of this software) will not be liable for any damages\
+you may suffer in connection with using, modifying, or distributing this "readspd" script.
+```
+WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEFORE WRITING ANY DATA THROUGH THE SMBUS
+--------------------------------------------------
 ### How-to
 
 #### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
