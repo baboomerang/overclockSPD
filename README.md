@@ -16,7 +16,7 @@ Author: http://forum.notebookreview.com/members/valuxin.400286/
 
 ### How-to
 
-#### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure ***i2c-tools*** package is installed.
+#### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
 ```
 Usage: ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]
 
