@@ -6,14 +6,12 @@ Shell scripts that provide linux users with tools to easily modify data (timings
 from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows.
 
 
-***It can also convert .emp files*** (created by Thaiphoon Burner) into .xmp files.  
+***It can also convert .emp files (created by Thaiphoon Burner) into .xmp files.***
   
   
-Directly inspired by the man who created the amazing tb2bin tool: Valuxin
-Program Link: http://forum.notebookreview.com/threads/guide-how-to-overclock-and-change-timings-for-any-ram-on-most-laptops.805589/  
+Directly inspired by the man who created the amazing tb2bin tool: [Valuxin](http://forum.notebookreview.com/members/valuxin.400286/)
 
-Author: http://forum.notebookreview.com/members/valuxin.400286/  
-
+[Background Info on RAMOC and TB2BIN](http://forum.notebookreview.com/threads/guide-how-to-overclock-and-change-timings-for-any-ram-on-most-laptops.805589/)  
 
 ### How-to
 
