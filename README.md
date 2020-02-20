@@ -3,12 +3,12 @@ A fast and easy way to read and write data to RAM SPD.
 
 
 Shell scripts that provide linux users with tools to easily modify data (timings, voltages, configuration...)
-from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows. Other scripts work but don't save the data in a compatbile format.
+from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows. They work fine but the data isn't saved in a compatible format.
 
 ***It can also convert .emp files*** (created by Thaiphoon Burner) into .xmp files.
 
 
-This project aims to make the transition from those Windows-based utilities much easier.
+This project aims to make the transition from those Windows-based utilities easier.
 
 Directly inspired by the man who created the amazing tb2bin tool: Valuxin
 Program Link: http://forum.notebookreview.com/threads/guide-how-to-overclock-and-change-timings-for-any-ram-on-most-laptops.805589/
