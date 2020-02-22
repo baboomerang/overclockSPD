@@ -59,6 +59,12 @@ main() {
         sleep 1
      
         i2cdump -y ${BUS} ${DIMM} b
+
+        if [ $? -ne 0 ]; then
+            echo "Error, make sure i2c_dev and i2c_i801 modules are loaded."
+            exit 1
+        fi
+
         echo "Preview of target device: is this the device?" 
         sleep 1
     
