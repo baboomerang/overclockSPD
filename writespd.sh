@@ -22,12 +22,12 @@
 #you may suffer in connection with using, modifying, or distributing this "writespd" script.
 #COMMENT
 
-if [ "$EUID" -ne 0 ];
+if [ "$(id -u)" -ne 0 ];
     then echo "Please run as root"
     exit
 fi
 
-usage() { echo "Usage: $0 [-b busaddr#] [-d dimaddr <0x##>] [-x(mp) mode] [FILE]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-x]xmponly [-b busaddr#] [-d dimaddr <0x##>] [FILE]" 1>&2; exit 1; }
 
 main() {
     while getopts "b:d:x" o; do
@@ -111,7 +111,7 @@ writeSPD() {
 
     INDEX=0
     while [ $((INDEX+OFFSET)) -le ${END} ]; do
-        echo -en "\rWriting to SPD: $((INDEX+OFFSET))/${END} BYTE:(${ARRAYHEX[${INDEX}]})"
+        echo "Writing to SPD: $((INDEX+OFFSET))/${END} BYTE:(${ARRAYHEX[${INDEX}]})"
         sleep 0.1
         i2cset -y ${BUS} ${DIMM} $((INDEX+OFFSET)) ${ARRAYHEX[${INDEX}]}
         INDEX=$((INDEX+1))

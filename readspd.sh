@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Project: readspd - a RAM SPD reading tool similar to TB2BIN
 # Author: baboomerang https://github.com/baboomerang/
@@ -22,12 +22,14 @@
 #you may suffer in connection with using, modifying, or distributing this "readspd" script.
 #COMMENT
 
-if [ "$EUID" -ne 0 ]; then
+#if [ "$EUID" -ne 0 ]; then    #bashism
+
+if [ "$(id -u)" -ne 0 ]; then
     echo "Please run as root"
     exit
 fi
 
-usage() { echo "Usage: $0 [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-x]xmponly [-b <0-9>] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]" 1>&2; exit 1; }
 
 main() {
     while getopts "b:d:x" o; do
@@ -47,8 +49,7 @@ main() {
         esac
     done
     shift "$((OPTIND-1))"
-
-    
+ 
     if [ -z ${BUS} ] || [ -z ${DIMM} ]; then
         usage
     else
@@ -101,8 +102,9 @@ readSPD() {
     fi
 
     while [ ${INDEX} -le ${END} ]; do
-        echo -en "\rReading from SPD: $INDEX/$END"
+        echo "Reading from SPD: $INDEX/$END"
         HEX=$(i2cget -y ${BUS} ${1} ${INDEX} | sed -ne 's/^0x\(.*\)/\1/p')
+        echo "${HEX}"
         printf "\x${HEX}" >> dimm"${1}"."${DATE}".${EXT}
         INDEX=$((INDEX+1))
     done 

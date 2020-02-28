@@ -6,6 +6,7 @@ main() {
     if [ $# -lt 1 ]; then
         usage
     else
+        #set -o posix
         EMPFILE=$1
 
         if [ ! -f ${EMPFILE} ]; then
@@ -13,10 +14,12 @@ main() {
             usage
         fi
 
-        RAWHEX=$(cat ${EMPFILE} | xxd -p -c 256 | tr -d '\n'| sed -e 's/../& /g')
+        #IFS=' '
+        #set -- $(cat ${EMPFILE} | xxd -p -c 256 | tr -d '\n'| sed -e 's/../& /g')
         #all of the EMPFILE is stored into the first element of the RAWHEX array.
-
+        RAWHEX=$(cat ${EMPFILE} | xxd -p -c 256 | tr -d '\n'| sed -e 's/../& /g')
         ARRAYHEX=($RAWHEX)
+
         HEXFILELEN=${#ARRAYHEX[@]}
 
         if [ ${HEXFILELEN} != 52 ]; then
