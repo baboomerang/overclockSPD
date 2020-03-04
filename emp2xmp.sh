@@ -27,7 +27,7 @@ main() {
             exit 1
         fi
 
-        DATE=$(date +%Y-%m-%d +%T)
+        DATE=$(date +%Y-%m-%d)
         CONVERTEDFILE="${1}.${DATE}.xmp"
         echo "" | tr -d '\n' > "${CONVERTEDFILE}"
 
