@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 def main(argv):
-    if not os.geteuid() == 0:
+    if not os.geteuid():
         print("Please run as root.")
         sys.exit(1)
     try:
