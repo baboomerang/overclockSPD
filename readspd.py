@@ -4,16 +4,17 @@
 readspd.py It runs a shell command on the selected bus address and dumps the data
 from the smbus
 
-this readspd.py software is provided "as-is" with no warranty, implied or not.
+This readspd.py software is provided "as-is" with no warranty, implied or not.
 By using this script you agree to proceed at your own risk.
 """
+
 import getopt
 import os
 import subprocess
 import sys
 
 def main(argv):
-    if not os.geteuid():
+    if os.getuid():
         print("Please run as root.")
         sys.exit(1)
     try:
