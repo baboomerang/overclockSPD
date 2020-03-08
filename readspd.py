@@ -16,9 +16,9 @@ import sys
 def main(argv):
     if os.getuid():
         print("Please run as root.")
-        sys.exit(1)
+        sys.exit(1)    
     try:
-        opts, argv = getopt.getopt(argv, "hb:d:", ["bus=", "dimm="])
+        opts, argv = getopt.getopt(argv, "hb:d:", ["busaddr=", "dimmaddr="])
 
     except getopt.error:
         print(sys.argv[0], '-b <bus addr> -d <dimm addr>')
@@ -30,10 +30,12 @@ def main(argv):
             sys.exit(0)
         elif opt in ("-b", "--bus"):
             bus = arg
-        elif opt in ("-b", "--dimm"):
+        elif opt in ("-d", "--dimm"):
             dimm = arg
 
-def readspd(bus, dimm):
+    readSPD(bus, dimm)
+
+def readSPD(bus, dimm):
     if os.access('./', os.W_OK):
         print('Cannot write dump to current directory')
         sys.exit(1)

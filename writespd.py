@@ -36,6 +36,7 @@ def main(argv):
 
     writeSPD(bus, dimm, filepath)
 
+
 def writeSPD(bus, dimm, filepath):
     spdfile = Path(str(filepath))
 
@@ -49,6 +50,7 @@ def writeSPD(bus, dimm, filepath):
             spdfile.seek(1)
             print(byte)
             subprocess.call('i2cset', bus, dimm, index, byte, shell=True)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
