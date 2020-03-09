@@ -33,9 +33,9 @@ def main(argv):
         elif opt in ("-d", "--dimm"):
             dimm = arg
 
-    readSPD(bus, dimm)
+    readspd(bus, dimm)
 
-def readSPD(bus, dimm):
+def readspd(bus, dimm):
     if os.access('./', os.W_OK):
         print('Cannot write dump to current directory')
         sys.exit(1)
