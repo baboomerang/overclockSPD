@@ -52,5 +52,6 @@ def writespd(bus, dimm, filepath):
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, err = i2cset_proc.communicate()
 
+
 if __name__ == "__main__":
     main(sys.argv[1:])
