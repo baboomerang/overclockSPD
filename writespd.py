@@ -44,11 +44,13 @@ def writespd(bus, dimm, filepath):
         sys.exit(1)
     else:
         spdfile = open(spdfile, "rb")
-        for index in range(0, 255):
+        for _ in range(0, 255):
             byte = spdfile.read(1)
             spdfile.seek(1)
             print(byte)
-            subprocess.call('i2cset', bus, dimm, index, byte, shell=True)
+            i2cset_proc = subprocess.Popen(['i2cset', bus, dimm, byte], \
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, err = i2cset_proc.communicate()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
