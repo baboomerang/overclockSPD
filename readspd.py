@@ -39,7 +39,6 @@ def readspd(bus, dimm):
         sys.exit(1)
     else:
         for index in range(0, 255):
-            subprocess.call('i2cget', bus, dimm, index)
             i2cget_proc = subprocess.Popen(['i2cget', bus, dimm, index], \
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             output, err = i2cget_proc.communicate()
