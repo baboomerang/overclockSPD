@@ -16,10 +16,10 @@ import sys
 def main(argv):
     if os.getuid():
         print("Please run as root.")
-        sys.exit(1)    
-    try:
-        opts, argv = getopt.getopt(argv, "hb:d:", ["busaddr=", "dimmaddr="])
+        sys.exit(1)
 
+    try:
+        opts, args = getopt.getopt(argv, "hb:d:", ["bus=", "dimm="])
     except getopt.error:
         print(sys.argv[0], '-b <bus addr> -d <dimm addr>')
         sys.exit(1)
@@ -35,16 +35,22 @@ def main(argv):
 
     readSPD(bus, dimm)
 
-def readSPD(bus, dimm):
-    if os.access('./', os.W_OK):
+def readSPD(busaddr, dimmaddr):
+    if not os.access('./', os.W_OK):
         print('Cannot write dump to current directory')
         sys.exit(1)
     else:
-        for index in range(0, 255):
-            i2cget_proc = subprocess.Popen(['i2cget', bus, dimm, index], \
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            output, err = i2cget_proc.communicate()
-
+        print('WARNING! This program may confuse your i2c bus')
+        ans = input('(y/N) << ').lower()
+        if ans in ['yes', 'y']:
+            for index in range(0, 255):
+                getbyte = subprocess.Popen(['i2cget', str(busaddr), str(dimmaddr), \
+                        str(index)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                output, err = getbyte.communicate()
+                print(output)
+        else:
+            print('User did not type yes/y/Y. No changes have been made. Exiting')
+            sys.exit(1)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
