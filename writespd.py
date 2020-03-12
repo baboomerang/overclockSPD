@@ -15,17 +15,17 @@ from pathlib import Path
 
 def main(argv):
     if os.getuid():
-        print ("Please run as root.")
+        print("Please run as root.")
         sys.exit(1)
     try:
         opts, argv = getopt.getopt(argv, "hb:d:f:", ["bus=", "dimm=", "filepath="])
     except getopt.error:
-        print (sys.argv[0], '-b <bus addr> -d <dimm addr> -f <filepath>')
+        print(sys.argv[0], '-b <bus addr> -d <dimm addr> -f <filepath>')
         sys.exit(1)
 
     for opt, arg in opts:
         if opt == '-h':
-            print (sys.argv[0], '-b <bus addr> -d <dimm addr>')
+            print(sys.argv[0], '-b <bus addr> -d <dimm addr>')
             sys.exit()
         elif opt in ("-b", "--bus"):
             bus = arg
@@ -34,22 +34,23 @@ def main(argv):
         elif opt in ("-f", "--file"):
             inputpath = arg
 
-    writeSPD(bus, dimm, filepath)
+    writespd(bus, dimm, inputpath)
 
-
-def writeSPD(bus, dimm, filepath):
+def writespd(bus, dimm, filepath):
     spdfile = Path(str(filepath))
 
-    if spdfile.is_file() is None:
+    if not spdfile.is_file():
         print('Input file not found.')
         sys.exit(1)
     else:
         spdfile = open(spdfile, "rb")
-        for index in range(0, 255):
+        for _ in range(0, 255):
             byte = spdfile.read(1)
             spdfile.seek(1)
             print(byte)
-            subprocess.call('i2cset', bus, dimm, index, byte, shell=True)
+            i2cset_proc = subprocess.Popen(['i2cset', bus, dimm, byte], \
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, err = i2cset_proc.communicate()
 
 
 if __name__ == "__main__":
