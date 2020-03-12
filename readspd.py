@@ -34,19 +34,19 @@ def main(argv):
             dimm = arg
 
     readspd(bus, dimm)
-    
+
 def readspd(busaddr, dimmaddr):
     if not os.access('./', os.W_OK):
         print('Cannot write dump to current directory')
         sys.exit(1)
     else:
-        print('WARNING! This program may confuse your i2c bus')
-        ans = input('(y/N) << ').lower()
+        print('WARNING! This program may confuse your i2c bus.')
+        ans = input('continue? (y/N) << ').lower()
         if ans in ['yes', 'y']:
             for index in range(0, 255):
-                getbyte = subprocess.Popen(['i2cget', str(busaddr), str(dimmaddr), \
+                i2cproc = subprocess.Popen(['i2cget', str(busaddr), str(dimmaddr), \
                         str(index)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                output, err = getbyte.communicate()
+                output, err = i2cproc.communicate()
                 print(output)
         else:
             print('User did not type yes/y/Y. No changes have been made. Exiting')
