@@ -19,21 +19,27 @@ def main(argv):
         sys.exit(1)
 
     try:
-        opts, argv = getopt.getopt(argv, "hb:d:f:", ["bus=", "dimm=", "filepath="])
+        opts, argv = getopt.getopt(argv, "hxb:d:f:", ["bus=", "dimm=", "filepath="])
     except getopt.error:
-        print(sys.argv[0], '-b <bus addr> -d <dimm addr> -f <filepath>')
+        print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr> -f <filepath>')
         sys.exit(1)
 
     for opt, arg in opts:
         if opt == '-h':
-            print(sys.argv[0], '-b <bus addr> -d <dimm addr>')
-            sys.exit()
+            print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr> -f <filepath>')
+            print("-x       --xmp | write only to xmp region")
+            print("-b       --bus <busaddr> (i.e. 0,1,2,3...)")
+            print("-d       --dimm <dimmaddr> (i.e. 0x50,0x21,0x4A")
+            print("-f       --file <filepath> (i.e. ./foo/bar/ocprofile.spd")
+            sys.exit(0)
         elif opt in ("-b", "--bus"):
             bus = arg
         elif opt in ("-b", "--dimm"):
             dimm = arg
         elif opt in ("-f", "--file"):
             inputpath = arg
+        elif opt in ("-x", "--xmp"):
+            xmp = true
 
     writespd(bus, dimm, inputpath)
 
@@ -45,13 +51,13 @@ def writespd(busaddr, dimmaddr, filepath):
         sys.exit(1)
     else:
         print('WARNING! This program can confuse your I2C bus, cause data loss and worse!')
-        print('I will write to device file /dev/i2c-',busaddr, 'chip address', dimmaddr, \
+        print('I will write to device file /dev/i2c-', busaddr, 'chip address', dimmaddr, \
               ', using write byte')
 
-        ans = input('continue? (yes/y/N/No) << ').lower()
+        ans = input('Accept the risks and proceed? (yes/y/N/No): ').lower()
         if ans in ['yes', 'y']:
             spdfile = open(spdfile, "rb")
-            for _ in range(0, 255):
+            for _ in range(0, 256):
                 byte = spdfile.read(1)
                 spdfile.seek(1)
                 print(byte)
