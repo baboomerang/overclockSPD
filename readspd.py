@@ -20,38 +20,56 @@ def main(argv):
         sys.exit(1)
 
     try:
-        opts, args = getopt.getopt(argv, "hb:d:", ["bus=", "dimm="])
+        opts, argv = getopt.getopt(argv, "hxb:d:", ["bus=", "dimm="])
     except getopt.error:
-        print(sys.argv[0], '-b <bus addr> -d <dimm addr>')
+        print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
         sys.exit(1)
 
     for opt, arg in opts:
         if opt == '-h':
-            print(sys.argv[0], '-b <bus addr> -d <dimm addr>')
+            print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
+            print("-x   --xmp | read only from xmp region")
+            print("-b   --bus <busaddr> (i.e. 0,1,2,3...)")
+            print("-d   --dimm <dimmaddr> (i.e. 0x50,0x21,0x4A)")
             sys.exit(0)
         elif opt in ("-b", "--bus"):
             bus = arg
         elif opt in ("-d", "--dimm"):
             dimm = arg
+        elif opt in ("-x", "--xmp"):
+            xmp = True
+        else:
+            xmp = False
 
-    readspd(bus, dimm)
+    readspd(bus, dimm, xmp)
 
-def readspd(busaddr, dimmaddr):
+def readspd(busaddr, dimmaddr, xmpmode):
     if not os.access('./', os.W_OK):
-        print('Cannot write dump to current directory')
+        print('Cannot write dump to current directory. Check file/folder permissions')
         sys.exit(1)
     else:
         print('WARNING! This program can confuse your I2C bus, cause data loss and worse!')
         print('I will read from device file /dev/i2c-', busaddr, 'chip address', \
                                                         dimmaddr, 'using read byte')
         print('')
-        ans = input('Proceed anyways? (yes/y/N/No): ').lower()
+        ans = input('Accept the risks and proceed? (yes/y/N/No): ').lower()
+
         if ans in ['yes', 'y']:
             today = date.today()
             todaysdate = today.strftime("%Y-%m-%d")
 
-            spddump = open("dimm{}.{}.spd".format(dimmaddr, todaysdate), 'wb')
-            for index in range(0, 256):
+            if xmpmode:
+                start = 176
+                end = 251
+                ext = "xmp"
+            else:
+                start = 0
+                end = 256
+                ext = "spd"
+
+            spddump = open("dimm{}.{}.{}".format(dimmaddr, todaysdate, ext), 'wb')
+
+            for index in range(start, end):
                 i2cproc = subprocess.Popen(['i2cget', '-y', str(busaddr), str(dimmaddr), \
                         str(index)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 output, err = i2cproc.communicate()
