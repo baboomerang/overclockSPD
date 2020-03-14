@@ -21,11 +21,12 @@ def main(argv):
 
     try:
         opts, argv = getopt.getopt(argv, "hxb:d:", ["bus=", "dimm="])
-    except getopt.error:
+    except getopt.GetoptError:
         print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
         sys.exit(1)
 
     for opt, arg in opts:
+        xmp = False         #its False by default unless the flag is given
         if opt == '-h':
             print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
             print("-x   --xmp | read only from xmp region")
@@ -38,8 +39,6 @@ def main(argv):
             dimm = arg
         elif opt in ("-x", "--xmp"):
             xmp = True
-        else:
-            xmp = False
 
     readspd(bus, dimm, xmp)
 
@@ -82,4 +81,5 @@ def readspd(busaddr, dimmaddr, xmpmode):
             sys.exit(1)
 
 if __name__ == "__main__":
+    xmp = False
     main(sys.argv[1:])
