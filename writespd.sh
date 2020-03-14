@@ -97,7 +97,7 @@ writeSPD() {
         fi
         EXT="xmp"
         OFFSET=176
-        END=216
+        END=219
         #END=250 #this may erase profile 2 if you have anything there.
     else
         if [ ${FILELENGTH} != 256 ]; then
