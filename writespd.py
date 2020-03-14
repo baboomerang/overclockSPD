@@ -71,13 +71,11 @@ def writespd(busaddr, dimmaddr, filepath, xmpmode):
                 checkfile(file, 0)
 
             for index in range(0+offset, end):
-                byte = spdfile.read(1)
-                print(byte, end='')
-                print(index)
+                byte = ("0x" + spdfile.read(1).hex())
+                i2cproc = subprocess.Popen(['i2cset', '-y', busaddr, dimmaddr, \
+                 str(index), byte], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                output, err = i2cproc.communicate()
 
-                #i2cproc = subprocess.Popen(['i2cset', '-y', busaddr, dimmaddr, \
-                #        index, byte], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                #output, err = i2cproc.communicate()
         else:
             print('User did not type yes/y/Y. No changes have been made. Exiting')
             sys.exit(1)
