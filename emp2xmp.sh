@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+#TODO: make this script posix compliant. It relies on arrays which arent POSIX
+#This script only works in bash due to its use of arrays. And its syntax is bashified
+
 
 usage() { echo "Usage: $0 <empfile>" 1>&2; exit 1; }
 
