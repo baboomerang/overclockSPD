@@ -76,10 +76,11 @@ def readspd(busaddr, dimmaddr, xmpmode):
                 output = bytes.fromhex(output)      #convert hexstr to 'bytes' type
                 spddump.write(output)
 
+            print("Dump written to: ./dimm{}.{}.{}".format(dimmaddr, todaysdate, ext))
+
         else:
             print('User did not type yes/y/Y. No changes have been made. Exiting')
             sys.exit(1)
 
 if __name__ == "__main__":
-    xmp = False
     main(sys.argv[1:])
