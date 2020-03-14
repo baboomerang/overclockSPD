@@ -29,7 +29,7 @@ you may suffer in connection with using, modifying, or distributing this "readsp
 ```
 WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEFORE WRITING ANY DATA THROUGH THE SMBUS
 --------------------------------------------------
-### How-to
+### Usage
 
 #### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
 ```
