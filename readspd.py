@@ -8,6 +8,8 @@ This readspd.py software is provided "as-is" with no warranty, implied or not.
 By using this script you agree to proceed at your own risk.
 """
 
+#TODO: implement a way to dump xmp profile 2 and let the user choose either XMP1 or 2
+
 import getopt
 import os
 import subprocess
@@ -59,7 +61,7 @@ def readspd(busaddr, dimmaddr, xmpmode):
 
             if xmpmode:
                 start = 176
-                end = 251
+                end = 220
                 ext = "xmp"
             else:
                 start = 0
