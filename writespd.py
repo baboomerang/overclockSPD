@@ -25,6 +25,7 @@ def main(argv):
         sys.exit(1)
 
     for opt, arg in opts:
+        xmp = False
         if opt == '-h':
             print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr> -f <filepath>')
             print("-x       --xmp | write only to xmp region")
@@ -34,19 +35,19 @@ def main(argv):
             sys.exit(0)
         elif opt in ("-b", "--bus"):
             bus = arg
-        elif opt in ("-b", "--dimm"):
+        elif opt in ("-d", "--dimm"):
             dimm = arg
         elif opt in ("-f", "--file"):
             inputpath = arg
         elif opt in ("-x", "--xmp"):
-            xmp = true
+            xmp = True
 
-    writespd(bus, dimm, inputpath)
+    writespd(bus, dimm, inputpath, xmp)
 
-def writespd(busaddr, dimmaddr, filepath):
-    spdfile = Path(str(filepath))
+def writespd(busaddr, dimmaddr, filepath, xmpmode):
+    file = Path(str(filepath))
 
-    if not spdfile.is_file():
+    if not file.is_file():
         print('Input file not found.')
         sys.exit(1)
     else:
@@ -56,17 +57,39 @@ def writespd(busaddr, dimmaddr, filepath):
 
         ans = input('Accept the risks and proceed? (yes/y/N/No): ').lower()
         if ans in ['yes', 'y']:
-            spdfile = open(spdfile, "rb")
-            for _ in range(0, 256):
+            spdfile = open(file, "rb")
+
+            if xmpmode:
+                offset = 176
+                end = 220
+                ext = "xmp"
+                checkfile(file, 1)
+            else:
+                offset = 0
+                end = 256
+                ext = "spd"
+                checkfile(file, 0)
+
+            for index in range(0+offset, end):
                 byte = spdfile.read(1)
-                spdfile.seek(1)
-                print(byte)
-                i2cset_proc = subprocess.Popen(['i2cset', '-y', bus, dimm, byte], \
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                output, err = i2cset_proc.communicate()
+                print(byte, end='')
+                print(index)
+
+                #i2cproc = subprocess.Popen(['i2cset', '-y', busaddr, dimmaddr, \
+                #        index, byte], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                #output, err = i2cproc.communicate()
         else:
             print('User did not type yes/y/Y. No changes have been made. Exiting')
             sys.exit(1)
+
+def checkfile(file, xmpmode):
+    size = os.path.getsize(file)
+    if xmpmode and (size < 40 or size > 44):
+        print("XMP file must be between 40-44 bytes")
+        sys.exit(1)
+    elif not xmpmode and size !=256:
+        print("SPD file must be exactly 256 bytes")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
