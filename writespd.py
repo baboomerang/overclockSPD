@@ -12,6 +12,7 @@ import sys
 import getopt
 import subprocess
 from pathlib import Path
+from time import sleep
 
 def main(argv):
     if os.getuid():
@@ -73,10 +74,15 @@ def writespd(busaddr, dimmaddr, filepath, xmpmode):
             print("Writing....")
             for index in range(0+offset, end):
                 byte = ("0x" + spdfile.read(1).hex())
-                print(byte, end=' ')
+
+                print("Writing to SPD: {}/{} ({})".format(index,end,byte))
+                sleep(0.1)  #writing through smbus requires some delay
+
                 i2cproc = subprocess.Popen(['i2cset', '-y', busaddr, dimmaddr, \
-                 str(index), byte], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    str(index), byte], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 output, err = i2cproc.communicate()
+
+            print("{} written successfully to {}".format(filepath, dimmaddr))
 
         else:
             print('User did not type yes/y/Y. No changes have been made. Exiting')
