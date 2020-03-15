@@ -69,13 +69,14 @@ def readspd(busaddr, dimmaddr, xmpmode):
                 ext = "spd"
 
             spddump = open("dimm{}.{}.{}".format(dimmaddr, todaysdate, ext), 'wb')
-
+            print("Reading....")
             for index in range(start, end):
                 i2cproc = subprocess.Popen(['i2cget', '-y', str(busaddr), str(dimmaddr), \
                         str(index)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 output, err = i2cproc.communicate()
                 output = output[2:].decode()        #strip '0x' and convert to str
                 output = bytes.fromhex(output)      #convert hexstr to 'bytes' type
+                print(output, end=' ')
                 spddump.write(output)
 
             print("Dump written to: ./dimm{}.{}.{}".format(dimmaddr, todaysdate, ext))

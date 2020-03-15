@@ -70,8 +70,10 @@ def writespd(busaddr, dimmaddr, filepath, xmpmode):
                 ext = "spd"
                 checkfile(file, 0)
 
+            print("Writing....")
             for index in range(0+offset, end):
                 byte = ("0x" + spdfile.read(1).hex())
+                print(byte, end=' ')
                 i2cproc = subprocess.Popen(['i2cset', '-y', busaddr, dimmaddr, \
                  str(index), byte], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 output, err = i2cproc.communicate()
