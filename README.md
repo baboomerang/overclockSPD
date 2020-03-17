@@ -36,7 +36,7 @@ sudo pacman -S i2c-tools
 sudo modprobe i2c-i801
 sudo modprobe i2c-dev
 ```
-Usually i2c-i801 is loaded by default on Arch, but its included here incase it wasn't.
+Usually i2c-i801 is loaded by default on Arch, but its included here incase it isn't for your distro.
 
  
 ### Usage
