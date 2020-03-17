@@ -1,6 +1,6 @@
 # overclockSPD
-Fast and easy ways to read and write data to RAM SPD.
-_will also include a gui for overclocking ram_
+Fast and easy ways to read and write data to RAM SPD. 
+_\*will also include a gui for overclocking ram_
 
 These are scripts that provide linux users with tools to easily modify data (timings, voltages, configuration...)
 from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows. (which is unfortunate)
