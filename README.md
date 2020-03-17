@@ -1,10 +1,9 @@
-# readspd
-A fast and easy way to read and write data to RAM SPD.
+# overclockSPD
+Fast and easy ways to read and write data to RAM SPD.
+_will also include a gui for overclocking ram_
 
-
-Shell scripts that provide linux users with tools to easily modify data (timings, voltages, configuration...)
-from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows.
-
+These are scripts that provide linux users with tools to easily modify data (timings, voltages, configuration...)
+from multiple sticks of RAM. Other tools currently out there such as Taiphoon Burner, TB2BIN, RWEVERYTHING... only run on Windows. (which is unfortunate)
 
 ***It can also convert .emp files (created by Thaiphoon Burner) into .xmp files.***
   
