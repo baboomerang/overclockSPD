@@ -28,9 +28,19 @@ you may suffer in connection with using, modifying, or distributing this "overcl
 ```
 WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEFORE WRITING ANY DATA THROUGH THE SMBUS
 --------------------------------------------------
+
+#### Install
+###### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
+```
+sudo pacman -S i2c-tools
+sudo modprobe i2c-i801
+sudo modprobe i2c-dev
+```
+Usually i2c-i801 is loaded by default on Arch, but its included here incase it wasn't.
+
+ 
 ### Usage
 
-#### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
 ```
 Usage: sudo ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]
        sudo python readspd.py -x -b <busaddr> -d <dimmaddr>                    # only reads 1 target at a time
@@ -52,7 +62,7 @@ python writespd.py -b 9 -d 0x50 -f ./ocdumpprofile.spd
 $ ls
 dimm0x50.spd  dimm0x51.spd  dimm0x52.spd  dimm0x53.spd
 ```
-FILE CONTENTS
+DUMPED CONTENT
 --------------------------------------------------------------------------------
 ```
  $ xxd dimm0x50.2020-02-20.spd 
