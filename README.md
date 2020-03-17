@@ -32,14 +32,20 @@ WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEF
 
 #### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
 ```
-Usage: ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]
+Usage: sudo ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]
+       sudo python readspd.py -x -b <busaddr> -d <dimmaddr>                    # only reads 1 target at a time
+       sudo ./writespd.sh [-x]xmponly [-b busaddr#] [-d dimaddr <0x##>] [FILE] # only writes 1 target at a time
+       sudo python writespd.py -x -b <busaddr> -d <dimmaddr> -f <filepath>     # only writes 1 target at a time
 
 ```
 Results will be saved in the same WD as input file. Check if there is write access to it otherwise the scripts will fail.
 
-**Example**
+**Examples**
 ```
 ./readspd.sh -b 9 -d 0x50 0x51 0x52 0x53
+./writespd.sh -b 9 -d 0x50 ./ocdumpprofile.spd
+python readspd.py -b 9 -d 0x50
+python writespd.py -b 9 -d 0x50 -f ./ocdumpprofile.spd
 ```
 *OUTPUT*:
 ```
