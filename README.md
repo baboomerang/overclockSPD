@@ -15,16 +15,16 @@ Directly inspired by the man who created the amazing tb2bin tool: [Valuxin](http
 DISCLAIMER
 ------------------------------------------------
 ```
-DISCLAIMER: This "readspd" is provided by baboomerang (the writer & provider of this software)\
+DISCLAIMER: This "overclockSPD" is provided by baboomerang (the writer & provider of this software)\
 "as is" and "with all faults." baboomerang (the writer & provider of this software)\
 makes no representations or warranties of any kind concerning the safety,\
 suitability, lack of viruses, inaccuracies, typographical errors, or other harmful\
-components of this "readspd". There are inherent dangers in the use of any software,\
-and you are solely responsible for determining whether this "readspd" is compatible \
+components of this "overclockSPD". There are inherent dangers in the use of any software,\
+and you are solely responsible for determining whether this "overclockSPD" is compatible \
 with your equipment and other software installed on your equipment. You are also solely \
 responsible for the protection of your equipment and backup of your data, and\
 baboomerang (the writer & provider of this software) will not be liable for any damages\
-you may suffer in connection with using, modifying, or distributing this "readspd" or any part of it.
+you may suffer in connection with using, modifying, or distributing this "overclockSPD" or any part of it.
 ```
 WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEFORE WRITING ANY DATA THROUGH THE SMBUS
 --------------------------------------------------
