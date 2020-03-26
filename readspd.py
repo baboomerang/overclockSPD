@@ -29,7 +29,7 @@ def main(argv):
 
     for opt, arg in opts:
         xmp = False         #its False by default unless the flag is given
-        if opt == '-h':
+        if opt in("-h", "--help):
             print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
             print("-x   --xmp | read only from xmp region")
             print("-b   --bus <busaddr> (i.e. 0,1,2,3...)")
