@@ -27,7 +27,7 @@ def main(argv):
 
     for opt, arg in opts:
         xmp = False
-        if opt == '-h':
+        if opt in ("-h", "--help"):
             print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr> -f <filepath>')
             print("-x       --xmp | write only to xmp region")
             print("-b       --bus <busaddr> (i.e. 0,1,2,3...)")
