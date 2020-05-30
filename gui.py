@@ -47,11 +47,12 @@ def main(s):
         elif key == curses.KEY_ENTER:
             w.clear()
             w.addstr(0, 0, "You pressed {}".format(menu[index]))
+            w.getch()
             w.refresh()
             w.getch()
 
-        print_menu(w, index)
-        w.refresh()
+    print_menu(w, index)
+    w.refresh()
 
 
     curses.nocbreak()
