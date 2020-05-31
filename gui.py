@@ -24,6 +24,18 @@ def print_menu(scr, key_value):
 
     scr.refresh()
 
+def flashspd():
+    i = 0
+    test = "string"
+
+def readspd():
+    i = 1
+    test2 = "string"
+
+def viewspd():
+    #this part will include a built in viewer of the hex and description for each
+    #value of the word
+    i = 2;
 
 def main(s):
     curses.curs_set(0)
