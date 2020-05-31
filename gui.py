@@ -30,8 +30,8 @@ def main(s):
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
     w = curses.newwin(sh, sw, 0, 0)
-    w.keypad(True)
     w.attron(curses.color_pair(1))
+    w.keypad(True)
 
     key = 0
     index = 0
@@ -40,19 +40,19 @@ def main(s):
     while True:
         key = w.getch()
         w.clear()
-        if key == curses.KEY_LEFT and index > 0:
+
+        if key == curses.KEY_UP and index > 0:
             index -= 1;
-        elif key == curses.KEY_RIGHT and index < (len(menu) - 1):
+        elif key == curses.KEY_DOWN and index < (len(menu) - 1):
             index += 1;
-        elif key == curses.KEY_ENTER:
-            w.clear()
-            w.addstr(0, 0, "You pressed {}".format(menu[index]))
-            w.getch()
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            w.box(0,0)
+            w.addstr(0, 5, "You pressed {}".format(menu[index]))
             w.refresh()
             w.getch()
 
-    print_menu(w, index)
-    w.refresh()
+        print_menu(w, index)
+        w.refresh()
 
 
     curses.nocbreak()
