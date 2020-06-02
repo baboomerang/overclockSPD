@@ -22,25 +22,27 @@ def main(argv):
         sys.exit(1)
 
     try:
-        opts, argv = getopt.getopt(argv, "hxb:d:", ["bus=", "dimm="])
+        opts, args = getopt.getopt(argv, "b:d:hx", ["bus=", "dimm=", "help", "xmp"])
     except getopt.GetoptError:
         print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
         sys.exit(1)
 
+    xmp = False         #its False by default unless the flag is given
+
     for opt, arg in opts:
-        xmp = False         #its False by default unless the flag is given
+        print("arg: {} opt: {}".format(arg, opt))
         if opt in("-h", "--help"):
             print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr>')
             print("-x   --xmp | read only from xmp region")
             print("-b   --bus <busaddr> (i.e. 0,1,2,3...)")
             print("-d   --dimm <dimmaddr> (i.e. 0x50,0x21,0x4A)")
             sys.exit(0)
+        elif opt in ("-x", "--xmp"):
+            xmp = True
         elif opt in ("-b", "--bus"):
             bus = arg
         elif opt in ("-d", "--dimm"):
             dimm = arg
-        elif opt in ("-x", "--xmp"):
-            xmp = True
 
     readspd(bus, dimm, xmp)
 
@@ -50,8 +52,8 @@ def readspd(busaddr, dimmaddr, xmpmode):
         sys.exit(1)
     else:
         print('WARNING! This program can confuse your I2C bus, cause data loss and worse!')
-        print('I will read from device file /dev/i2c-', busaddr, 'chip address', \
-                                                        dimmaddr, 'using read byte')
+        print('I will read from device file /dev/i2c-{}, chip address {}, \
+                                reading in bytes'.format(busaddr, dimmaddr))
         print('')
         ans = input('Accept the risks and proceed? (yes/y/N/No): ').lower()
 
