@@ -20,14 +20,15 @@ def main(argv):
         sys.exit(1)
 
     try:
-        opts, argv = getopt.getopt(argv, "hxb:d:f:", ["bus=", "dimm=", "filepath="])
+        opts, args = getopt.getopt(argv, "hxb:d:f:", ["bus=", "dimm=", "filepath=", \
+                                                      "help", "xmp"])
     except getopt.error:
         print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr> -f <filepath>')
         sys.exit(1)
 
     xmp = False
 
-    for opt, args in opts:
+    for opt, arg in opts:
         if opt in ("-h", "--help"):
             print(sys.argv[0], '-x -b <busaddr> -d <dimmaddr> -f <filepath>')
             print("-x       --xmp | write only to xmp region")
