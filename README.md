@@ -33,8 +33,8 @@ WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEF
 ###### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
 ```
 sudo pacman -S i2c-tools
-sudo modprobe i2c-i801
-sudo modprobe i2c-dev
+sudo modprobe i2c_i801
+sudo modprobe i2c_dev
 ```
 Usually i2c-i801 is loaded by default on Arch, but its included here incase it isn't for your distro.
 
