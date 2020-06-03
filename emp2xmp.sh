@@ -76,11 +76,11 @@ main() {
         printf "\x${ARRAYHEX[13]}" >> ${CONVERTEDFILE}    #tRP  minimum
         printf "\x${ARRAYHEX[14]}" >> ${CONVERTEDFILE}    #tRCD minimum
         printf "\x${ARRAYHEX[15]}" >> ${CONVERTEDFILE}    #tWR  minimum
-        
+
         # in the ddr3 spec, these nibbles should be reversed
         # i.e. it should be 0x01 then 0x02
         # but instead this script will preserve what tb2bin does
-        
+
         UPPERtRASNIBBLE=${ARRAYHEX[27]}                   # 02 -> 2
         UPPERtRASNIBBLE=${UPPERtRASNIBBLE:1:1}            
 
