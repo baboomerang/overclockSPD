@@ -52,7 +52,7 @@ Results will be saved in the same WD as input file. Check if there is write acce
 
 **Examples**
 ```
-./readspd.sh -b 9 -d 0x50 0x51 0x52 0x53
+./readspd.sh -b 9 -d 0x50
 ./writespd.sh -b 9 -d 0x50 ./ocdumpprofile.spd
 python readspd.py -b 9 -d 0x50
 python writespd.py -b 9 -d 0x50 -f ./ocdumpprofile.spd
