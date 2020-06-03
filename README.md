@@ -48,7 +48,7 @@ Usage: sudo ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>]              #
        sudo python writespd.py -x -b <busaddr> -d <dimmaddr> -f <filepath>     # only writes 1 target at a time
 
 ```
-Results will be saved in the same WD as input file. Check if there is write access to it otherwise the scripts will fail.
+Results will be saved in the same directory as input file. Check if there is write access to it otherwise the scripts will fail.
 
 **Examples**
 ```
