@@ -42,7 +42,7 @@ Usually i2c-i801 is loaded by default on Arch, but its included here incase it i
 ### Usage
 
 ```
-Usage: sudo ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]
+Usage: sudo ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>]
        sudo ./writespd.sh [-x]xmponly [-b busaddr#] [-d dimaddr <0x##>] [FILE] # only writes 1 target at a time
        sudo python readspd.py -x -b <busaddr> -d <dimmaddr>                    # only reads 1 target at a time
        sudo python writespd.py -x -b <busaddr> -d <dimmaddr> -f <filepath>     # only writes 1 target at a time
