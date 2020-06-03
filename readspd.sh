@@ -56,20 +56,21 @@ main() {
         readSPD ${DIMM}
     fi
     
-    if [ -n "$1" ]; then
-        DIMM2=$1
-        readSPD ${DIMM2}
-    fi
+    #removed to keep consistent script behavior between the python version and the bash version
+    #if [ -n "$1" ]; then
+    #    DIMM2=$1
+    #    readSPD ${DIMM2}
+    #fi
 
-    if [ -n "$2" ]; then 
-        DIMM3=$2
-        readSPD ${DIMM3}
-    fi
+    #if [ -n "$2" ]; then 
+    #    DIMM3=$2
+    #    readSPD ${DIMM3}
+    #fi
 
-    if [ -n "$3" ]; then
-        DIMM4=$3
-        readSPD ${DIMM4}
-    fi
+    #if [ -n "$3" ]; then
+    #    DIMM4=$3
+    #    readSPD ${DIMM4}
+    #fi
 
 }
 
