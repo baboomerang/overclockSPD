@@ -36,7 +36,7 @@ sudo pacman -S i2c-tools
 sudo modprobe i2c_i801
 sudo modprobe i2c_dev
 ```
-Usually i2c-i801 is loaded by default on Arch, but its included here incase it isn't for your distro.
+Usually `i2c_i801` is loaded by default on Arch. It is included here incase it isn't for your distro.
 
  
 ### Usage
@@ -48,7 +48,7 @@ Usage: sudo ./readspd.sh [-x]xmp [-b busaddr] [-d dimaddr <0x##>]              #
        sudo python writespd.py -x -b <busaddr> -d <dimmaddr> -f <filepath>     # only writes 1 target at a time
 
 ```
-Results will be saved in the same directory as input file. Check if there is write access to it otherwise the scripts will fail.
+Results will be saved in the current working directory. Check if there is write access to it otherwise the scripts will fail.
 
 **Examples**
 ```
