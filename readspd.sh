@@ -29,7 +29,7 @@ if [ "$(id -u)" -ne 0 ]; then
     exit
 fi
 
-usage() { echo "Usage: $0 [-x]xmponly [-b <0-9>] [-d dimaddr <0x##>] optional:[dimmaddr2] [dimmaddr3] [dimmaddr4]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-x]xmponly [-b <0-9>] [-d dimaddr <0x##>]" 1>&2; exit 1; }
 
 main() {
     while getopts "b:d:x" o; do
