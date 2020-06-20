@@ -10,7 +10,11 @@ from multiple sticks of RAM. Other tools currently out there such as Taiphoon Bu
   
 Directly inspired by the man who created the amazing tb2bin tool: [Valuxin](http://forum.notebookreview.com/members/valuxin.400286/)
 
-[Background Info on RAMOC and TB2BIN](http://forum.notebookreview.com/threads/guide-how-to-overclock-and-change-timings-for-any-ram-on-most-laptops.805589/)  
+Shoutout to xx (or \x) from r/tp discord for helping me out. He is the man when it comes to RAM OC   
+
+[Background info on RAMOC and TB2BIN](http://forum.notebookreview.com/threads/guide-how-to-overclock-and-change-timings-for-any-ram-on-most-laptops.805589/)  
+
+[Another overclock guide by Zak Kemble](https://blog.zakkemble.net/modifying-ram-spd-data/)
 
 DISCLAIMER
 ------------------------------------------------
