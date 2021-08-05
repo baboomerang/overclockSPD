@@ -55,12 +55,12 @@ main() {
         usage
     fi
 
-    readSPD
+    read_spd
 
     exit 0
 }
 
-readSPD() {
+read_spd() {
     # Print SPD contents to terminal in bytes
     if [ $(i2cdump "$BUS" "$DIMM" b) ]; then
         echo "Error, make sure i2c_dev and i2c_i801 modules are loaded."
