@@ -47,9 +47,6 @@ main() {
         esac
     done
 
-    # Shift out all parameters except the last one (the input file)
-    shift "$((OPTIND-1))"
-
     # Script can only work with valid BUS and DIMM numbers
     if [ -z "$BUS" ] || [ -z "$DIMM" ]; then
         usage
