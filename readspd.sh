@@ -98,7 +98,7 @@ readSPD() {
         index=$((index+1))
     done
 
-    echo "\nDump written to: ${PWD}/dimm$DIMM.$DATE.$EXT"
+    echo "\nDump written to: ${PWD}/dimm$DIMM.$date.$ext"
 }
 
 main "$@"
