@@ -112,7 +112,7 @@ write_spd() {
             exit 1
         fi
         ext="spd"
-        offset=0;
+        offset=0
         end=255
     fi
 
