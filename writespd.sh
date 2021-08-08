@@ -48,14 +48,14 @@ main() {
         esac
     done
 
+    if [ -z "$BUS" ] || [ -z "$DIMM" ] || [ -z "$INPUTFILE" ]; then
+        usage
+    fi
+
     # Shift out all parameters except the last one (the input file)
     shift "$((OPTIND-1))"
 
     INPUTFILE=$1
-
-    if [ -z "$BUS" ] || [ -z "$DIMM" ] || [ -z "$INPUTFILE" ]; then
-        usage
-    fi
 
     echo "WARNING! Do not write an incorrect or bad address for i2cbus or dimm!"
     echo "Writing to non-dimm locations can cause permanent damage!"
