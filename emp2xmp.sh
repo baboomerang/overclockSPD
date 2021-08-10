@@ -21,7 +21,7 @@ main() {
     fi
 
     #all of the EMPFILE is stored into the first element of the RAWHEX array.
-    RAWHEX=$(cat ${EMPFILE} | xxd -p -c 256 | tr -d '\n'| sed -e 's/../& /g')
+    RAWHEX=$(xxd ${EMPFILE} -p -c 256 | tr -d '\n'| sed -e 's/../& /g')
     ARRAYHEX=($RAWHEX)
 
     HEXFILELEN=${#ARRAYHEX[@]}
