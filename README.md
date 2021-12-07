@@ -107,12 +107,13 @@ $ xxd 2133_11_12_13_34_2T.emp.2020-02-20.xmp
 
 TROUBLESHOOTING
 --------------------------------------------------------------------------------
-If you get error similar to:
+If you get an error similar to:
 ```
 Error: Could not set address to 0x50: Device or resource busy
 ```
 
-Try unloading <code>at24</code> module with:
+Try unloading the <code>at24</code> module with:
 ```
 modprobe -r at24
 ```
+There may be other kernel modules that keep these devices busy.
