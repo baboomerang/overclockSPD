@@ -104,3 +104,16 @@ $ xxd 2133_11_12_13_34_2T.emp.2020-02-20.xmp
 00000010: 9cd2 21be 6c6e 0038 0e69 4600 5e69 0000  ..!.ln.8.iF.^i..
 00000020: 1a00 0008 0000 0000                      ........
 ```
+
+TROUBLESHOOTING
+--------------------------------------------------------------------------------
+If you get an error similar to:
+```
+Error: Could not set address to 0x50: Device or resource busy
+```
+
+Try unloading the <code>at24</code> module with:
+```
+modprobe -r at24
+```
+There may be other kernel modules that keep these devices busy.
