@@ -25,7 +25,7 @@
 usage() {
     echo "Usage: $0 [-x]XMP ONLY [-b] I2C BUS ADDRESS [-d] DIMM ADDRESS" 1>&2;
     echo "I2C BUS ADDRESS is an integer (usually 0-9)" 1>&2;
-    echo "DIMM ADDRESS is an integer (usually 0x50 through 0x54 for DDR3 systems)" 1>%2;
+    echo "DIMM ADDRESS is an integer (usually 0x50 through 0x54 for DDR3 systems)" 1>&2;
     echo "Example: $0 -b 6 -d 0x50" 1>&2;
     exit 1;
 }
