@@ -69,7 +69,7 @@ dimm0x50.spd  dimm0x51.spd  dimm0x52.spd  dimm0x53.spd
 DUMPED CONTENT
 --------------------------------------------------------------------------------
 ```
- $ xxd dimm0x50.2020-02-20.spd 
+$ xxd dimm0x50.2020-02-20.spd 
 00000000: 9211 0b03 0421 0209 0311 0108 0900 fe00  .....!..........
 00000010: 5f78 5f28 5f11 106f 2008 3c3c 00c8 8305  _x_(_..o .<<....
 00000020: 0000 ca97 9797 9700 0000 0000 0000 0000  ................
@@ -116,4 +116,4 @@ Try unloading the <code>at24</code> module with:
 ```
 modprobe -r at24
 ```
-There may be other kernel modules that keep these devices busy.
+There may be other kernel modules that keep these devices busy such as `eeprom`.
