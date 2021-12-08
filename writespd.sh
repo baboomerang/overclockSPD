@@ -22,13 +22,35 @@
 #you may suffer in connection with using, modifying, or distributing this "writespd" script.
 #COMMENT
 
+__error_i2c="
+Error: for unknown reasons, i2cset failed. Your i2c device is in an unknown state.
+DO NOT REBOOT THE DEVICE. YOU ARE ON YOUR OWN.
+"
+
+__usage="
+Usage: $(basename $0) [OPTIONS]
+
+Options:
+  -x,                 Write XMP profile only
+  -b, <address>       Which i2c bus should be used (in decimal)
+                      usually this is an integer (0-9)
+
+  -d, <address>       Which specific device should be written to (in hex)
+                      for DDR3 systems, usually (0x50, 0x51, 0x52, 0x53)
+                      0x50 - first dimm slot
+                      0x51 - second dimm slot
+                      0x52 - third dimm slot
+                      0x53 - fourth dimm slot
+
+  -h,                 Show this usage section
+
+Example:
+  $(basename $0) -b 6 -d 0x50 sampledump.spd
+  $(basename $0) -b 6 -d 0x50 -x 2400cl12.xmp
+"
 
 usage() {
-    echo "Usage: $0 [-x]XMP ONLY [-b] I2C BUS ADDRESS [-d] DIMM ADDRESS [FILENAME]" 1>&2;
-    echo "I2C BUS ADDRESS is an integer (usually 0-9)" 1>&2;
-    echo "DIMM ADDRESS is an integer (usually 0x50 through 0x54 for DDR3 systems)" 1>&2;
-    echo "Example: $0 -b 6 -d 0x50 sampledump.spd" 1>&2;
-    exit 1;
+    echo "$__usage"
 }
 
 main() {
@@ -39,34 +61,44 @@ main() {
     fi
 
     # Get and parse commandline options
-    while getopts "b:d:x" o; do
-        case "${o}" in
+    local OPTIND=1
+    while getopts "b:d:xh" opt; do
+        case "${opt}" in
             b)  BUS=${OPTARG};;
-            d)  DIM=${OPTARG};;
+            d)  DIMM=${OPTARG};;
             x)  XMP_MODE=1;;
-            *)  usage;;
+            h)  usage
+                exit 0;;
+            *)  usage
+                exit 1;;
         esac
     done
 
-    if [ -z "$BUS" ] || [ -z "$DIMM" ] || [ -z "$INPUTFILE" ]; then
-        usage
-    fi
-
     # Shift out all parameters except the last one (the input file)
-    shift "$((OPTIND-1))"
+    shift "$((OPTIND - 1))"
 
     INPUTFILE=$1
 
+    if [ -z "$BUS" ] || [ -z "$DIMM" ] || [ -z "$INPUTFILE" ]; then
+        usage
+        exit 1
+    fi
+
+    # Warn user of the possible risks using this script
     echo "WARNING! Do not write an incorrect or bad address for i2cbus or dimm!"
     echo "Writing to non-dimm locations can cause permanent damage!"
     echo "Please have backups incase something goes wrong."
     sleep 1
 
     # Show preview of the target device over i2c (in bytes)
-    if [ $(i2cdump -y "$BUS" "$DIMM" b) ]; then
+    i2cdump -y "$BUS" "$DIMM" b
+
+    if [ $? -ne 0 ]; then
         echo "Error, make sure i2c_dev and i2c_i801 modules are loaded."
         exit 1
     fi
+
+    # If the command was successful, ask the user if this is the intended device
     echo "Preview of target device: is this the intended device?"
     sleep 1
 
@@ -89,7 +121,7 @@ write_spd() {
     fi
 
     # I used this instead of IFS
-    local rawhex=$(cat "$INPUTFILE" | xxd -p -c 256 | tr -d '\n'| sed -e 's/../0x& /g')
+    local rawhex=$(xxd -p -c 256 "$INPUTFILE" | tr -d '\n' | sed -e 's/../0x& /g')
     local arrayhex=($rawhex)
     local filelength=${#arrayhex[@]}
 
@@ -112,7 +144,7 @@ write_spd() {
             exit 1
         fi
         ext="spd"
-        offset=0
+        offset=0;
         end=255
     fi
 
@@ -120,11 +152,19 @@ write_spd() {
     while [ $((index+offset)) -le ${end} ]; do
         echo "Writing to SPD: $((index+offset))/$end BYTE:(${arrayhex[${index}]})"
         sleep 0.2
+
         i2cset -y "$BUS" "$DIMM" $((index+offset)) "${arrayhex[${index}]}"
+
+        # If i2cset failed during the flash, something has gone wrong in the machine
+        if [ $? -ne 0 ]; then
+            echo "$__error_i2c"
+            exit 1;
+        fi
+
         index=$((index+1))
     done
 
-    echo "\n$INPUTFILE written successfully to $DIMM"
+    echo "$INPUTFILE written successfully to $DIMM"
 }
 
 main "$@"
