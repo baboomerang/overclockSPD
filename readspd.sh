@@ -22,12 +22,40 @@
 #you may suffer in connection with using, modifying, or distributing this "readspd" script.
 #COMMENT
 
+__error_i2c="
+Error: i2cget failed. Your i2c device may be in an unknown state.
+Double check to see if any data was changed or lost.
+"
+
+__error_printf="
+Error: printf failed. Check if you have write permissions to the file
+OR if printf is installed on your system.
+"
+
+__usage="
+Usage: $(basename $0) [OPTIONS]
+
+Options:
+  -x,                 Read XMP profile only
+  -b, <address>       Which i2c bus should be used (in decimal)
+                      usually this is an integer (0-9)
+
+  -d, <address>       Which specific device should be read from (in hex)
+                      for DDR3 systems, usually (0x50, 0x51, 0x52, 0x53)
+                      0x50 - first dimm slot
+                      0x51 - second dimm slot
+                      0x52 - third dimm slot
+                      0x53 - fourth dimm slot
+
+  -h,                 Show this usage section
+
+Example:
+  $(basename $0) -b 6 -d 0x50
+  $(basename $0) -b 6 -d 0x50 -x
+"
+
 usage() {
-    echo "Usage: $0 [-x]XMP ONLY [-b] I2C BUS ADDRESS [-d] DIMM ADDRESS" 1>&2;
-    echo "I2C BUS ADDRESS is an integer (usually 0-9)" 1>&2;
-    echo "DIMM ADDRESS is an integer (usually 0x50 through 0x54 for DDR3 systems)" 1>%2;
-    echo "Example: $0 -b 6 -d 0x50" 1>&2;
-    exit 1;
+    echo "$__usage"
 }
 
 main() {
@@ -38,18 +66,22 @@ main() {
     fi
 
     # Get and parse commandline options
-    while getopts "b:d:x" o; do
-        case "${o}" in
+    while getopts "b:d:xh" opt; do
+        case "${opt}" in
             b)  BUS=${OPTARG};;
             d)  DIMM=${OPTARG};;
             x)  XMP_MODE=1;;
-            *)  usage;;
+            h)  usage
+                exit 0;;
+            *)  usage
+                exit 1;;
         esac
     done
 
     # Script can only work with valid BUS and DIMM numbers
     if [ -z "$BUS" ] || [ -z "$DIMM" ]; then
         usage
+        exit 1
     fi
 
     read_spd
@@ -59,7 +91,9 @@ main() {
 
 read_spd() {
     # Print SPD contents to terminal in bytes
-    if [ $(i2cdump "$BUS" "$DIMM" b) ]; then
+    i2cdump -y "$BUS" "$DIMM" b
+
+    if [ $? -ne 0 ]; then
         echo "Error, make sure i2c_dev and i2c_i801 modules are loaded."
         exit 1
     fi
@@ -80,7 +114,8 @@ read_spd() {
     fi
 
     local date=$(date +%Y-%m-%d)
-    echo "" | tr -d '\n' > dimm"$DIMM"."$date".$ext
+    local filename="dimm"$DIMM"."$date".$ext"
+    echo -n "" > "$filename"
 
     if [ $? -ne 0 ]; then
         echo "Error writing file. Check file/folder permissions and try again."
@@ -90,12 +125,27 @@ read_spd() {
     while [ ${index} -le ${end} ]; do
         echo "Reading from SPD: $index/$end"
         local hex=$(i2cget -y "$BUS" "$DIMM" ${index} | sed -ne 's/^0x\(.*\)/\1/p')
+
+        # If i2cget failed during the read, something weird happened in the machine
+        if [ $? -ne 0 ]; then
+            echo "$__error_i2c"
+            exit 1
+        fi
+
         echo "${hex}"
-        printf "\x${hex}" >> dimm"$DIMM"."$date".$ext
+        printf "\x${hex}" >> "$filename"
+
+        # If printf failed, then either you do not have permissions to write to the file
+        # OR somehow printf is not present on this machine
+        if [ $? -ne 0 ]; then
+            echo "$__error_printf"
+            exit 1
+        fi
+
         index=$((index+1))
     done
 
-    echo "\nDump written to: ${PWD}/dimm$DIMM.$date.$ext"
+    echo "Dump written to: ${PWD}/${filename}"
 }
 
 main "$@"
