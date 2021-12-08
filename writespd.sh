@@ -23,8 +23,10 @@
 #COMMENT
 
 __error_i2c="
-Error: for unknown reasons, i2cset failed. Your i2c device is in an unknown state.
-DO NOT REBOOT THE DEVICE. YOU ARE ON YOUR OWN.
+Error: i2cset failed. Cannot write SPD. The SPD EEPROM might be locked.
+If locked EEPROM, try writing XMP profile instead.
+
+If XMP also fails, then the EEPROM might be fully locked.
 "
 
 __usage="
@@ -75,7 +77,7 @@ main() {
     done
 
     # Shift out all parameters except the last one (the input file)
-    shift "$((OPTIND - 1))"
+    shift "$((OPTIND-1))"
 
     INPUTFILE=$1
 
@@ -155,7 +157,7 @@ write_spd() {
 
         i2cset -y "$BUS" "$DIMM" $((index+offset)) "${arrayhex[${index}]}"
 
-        # If i2cset failed during the flash, something has gone wrong in the machine
+        # If i2cset failed during the flash, the EEPROM might be locked
         if [ $? -ne 0 ]; then
             echo "$__error_i2c"
             exit 1;
