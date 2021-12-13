@@ -133,7 +133,7 @@ write_spd() {
     local end=0
 
     if [ -n "$XMP_MODE" ]; then
-        if [ "$filelength" != 40 ]; then
+        if [ "$filelength" != 43 ]; then
             echo "XMP file must be exactly 40 bytes"
             exit 1
         fi
