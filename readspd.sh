@@ -106,7 +106,7 @@ read_spd() {
     if [ -n "$XMP_MODE" ]; then
         ext="xmp"
         index=176
-        end=250
+        end=219
     else
         ext="spd"
         index=0
