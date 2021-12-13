@@ -34,7 +34,7 @@ WARNING: WRITING TO NON-DIMM LOCATIONS CAN CAUSE DAMAGE/BRICKS. HAVE CAUTION BEF
 --------------------------------------------------
 
 #### Install
-###### You need to have ***i2c_dev*** and ***i2c_i801*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
+###### You need to have ***i2c_dev***, ***i2c_i801*** and ***eeprom*** modules loaded. Also make sure the ***i2c-tools*** package is installed.
 ```
 sudo pacman -S i2c-tools
 sudo modprobe i2c_i801
@@ -116,4 +116,3 @@ Try unloading the <code>at24</code> module with:
 ```
 modprobe -r at24
 ```
-There may be other kernel modules that keep these devices busy such as `eeprom`.
